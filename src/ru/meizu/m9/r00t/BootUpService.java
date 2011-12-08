@@ -1,12 +1,5 @@
 package ru.meizu.m9.r00t;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +7,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import java.io.*;
+
+import static android.util.Log.e;
 
 public class BootUpService extends Service {
 
@@ -23,7 +20,7 @@ public class BootUpService extends Service {
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		Log.i("m9.r00t", "Received start id " + startId + ": " + intent);
+		Log.i("m9.r00t: onStartCommand", "Received start id " + startId + ": " + intent);
 
 		copyfile("su");
 		copyfile("busybox");
@@ -59,6 +56,7 @@ public class BootUpService extends Service {
 		try {
 			basedir = getBaseContext().getFilesDir().getAbsolutePath();
 		} catch (Exception e) {
+            e("m9.r00t: RunExploit", "Can't find basedir");
 		}
 
 		@SuppressWarnings("unused")
@@ -86,8 +84,9 @@ public class BootUpService extends Service {
 					process.getInputStream()));
 			int read;
 			char[] buffer = new char[4096];
-			StringBuffer output = new StringBuffer();
-			while ((read = reader.read(buffer)) > 0) {
+			StringBuffer output;
+            output = new StringBuffer();
+            while ((read = reader.read(buffer)) > 0) {
 				output.append(buffer, 0, read);
 			}
 			reader.close();
@@ -102,12 +101,14 @@ public class BootUpService extends Service {
 
 	private void copyfile(String file) {
 		String basedir = null;
-		String of = file;
-		File f = new File(of);
+		String of;
+        of = file;
+        File f = new File(of);
 
 		try {
 			basedir = getBaseContext().getFilesDir().getAbsolutePath();
 		} catch (Exception e) {
+            e("m9.r00t: copyfile", "Can't find basedir");
 		}
 
 		if (!f.exists()) {
@@ -125,6 +126,7 @@ public class BootUpService extends Service {
 				in.close();
 				Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + of);
 			} catch (IOException e) {
+                e("m9.r00t: copyfile", "Can't open file" + f);
 			}
 		}
 	}
