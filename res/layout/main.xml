@@ -16,6 +16,12 @@
         android:layout_height="wrap_content"
         android:text="Get r00t" />
 
+    <Button
+        android:id="@+id/localDisableButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Unr00t phone" />
+
     <TextView
         android:id="@+id/outputView"
         android:layout_width="fill_parent"

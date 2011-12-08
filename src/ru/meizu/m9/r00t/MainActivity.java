@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 
 	private TextView outputView;
 	private Button localRunButton;
+	private Button localDisableButton;
 	private Handler handler = new Handler();
 
 	/** Called when the activity is first created. */
@@ -34,23 +35,30 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main);
 
 		outputView = (TextView) findViewById(R.id.outputView);
+
 		localRunButton = (Button) findViewById(R.id.localRunButton);
 		localRunButton.setOnClickListener(onLocalRunButtonClick);
+
+		localDisableButton = (Button) findViewById(R.id.localDisableButton);
+		localDisableButton.setOnClickListener(onLocalDisableButtonClick);
 
 		copyfile("su");
 		copyfile("busybox");
 		copyfile("levitator");
 		copyfile("local.sh");
-
-		// RunExploit();
-		// NotifyUser();
+		copyfile("unroot.sh");
 
 	}
 
 	private OnClickListener onLocalRunButtonClick = new OnClickListener() {
 		public void onClick(View v) {
 			RunExploit();
-			// NotifyUser();
+		}
+	};
+
+	private OnClickListener onLocalDisableButtonClick = new OnClickListener() {
+		public void onClick(View v) {
+			RunUnroot();
 		}
 	};
 
@@ -67,16 +75,15 @@ public class MainActivity extends Activity {
 		output(output);
 	}
 
-	private void NotifyUser() {
+	private void RunUnroot() {
+		String basedir = null;
 
-		Context context = getApplicationContext();
-		CharSequence text = "Now you have r00t rights";
-		int duration = Toast.LENGTH_LONG;
-
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.show();
-
+		try {
+			basedir = getBaseContext().getFilesDir().getAbsolutePath();
+		} catch (Exception e) {
+		}
+		String output = exec(basedir + "/" + "unroot.sh");
+		output(output);
 	}
 
 	// Executes UNIX command.
