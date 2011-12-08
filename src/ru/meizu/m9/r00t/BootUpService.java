@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class BootUpService extends Service {
 
 	public BootUpService() {
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -48,7 +48,7 @@ public class BootUpService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -61,6 +61,7 @@ public class BootUpService extends Service {
 		} catch (Exception e) {
 		}
 
+		@SuppressWarnings("unused")
 		String output = exec(basedir + "/" + "levitator");
 
 	}
