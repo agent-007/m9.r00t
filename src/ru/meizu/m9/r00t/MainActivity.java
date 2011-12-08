@@ -1,27 +1,21 @@
 package ru.meizu.m9.r00t;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.TextView;
+
 import java.io.*;
 
-import ru.meizu.m9.r00t.R;
+import static android.util.Log.e;
 
 public class MainActivity extends Activity {
 
 	private TextView outputView;
-	private Button localRunButton;
-	private Button localDisableButton;
-	private Handler handler = new Handler();
+    private Handler handler = new Handler();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -31,11 +25,13 @@ public class MainActivity extends Activity {
 
 		outputView = (TextView) findViewById(R.id.outputView);
 
-		localRunButton = (Button) findViewById(R.id.localRunButton);
-		localRunButton.setOnClickListener(onLocalRunButtonClick);
+        Button localRunButton;
+        localRunButton = (Button) findViewById(R.id.localRunButton);
+        localRunButton.setOnClickListener(onLocalRunButtonClick);
 
-		localDisableButton = (Button) findViewById(R.id.localDisableButton);
-		localDisableButton.setOnClickListener(onLocalDisableButtonClick);
+        Button localDisableButton;
+        localDisableButton = (Button) findViewById(R.id.localDisableButton);
+        localDisableButton.setOnClickListener(onLocalDisableButtonClick);
 
 		copyfile("su");
 		copyfile("busybox");
@@ -64,18 +60,23 @@ public class MainActivity extends Activity {
 		try {
 			basedir = getBaseContext().getFilesDir().getAbsolutePath();
 		} catch (Exception e) {
-		}
+            e("m9.r00t: RunExploit", "Can't find basedir");
+        }
 
-		String output = exec(basedir + "/" + "levitator");
-		output(output);
+		String output;
+        output = exec(basedir + "/" + "levitator");
+        output(output);
 	}
 
-	private void RunUnroot() {
+
+
+    private void RunUnroot() {
 		String basedir = null;
 
 		try {
 			basedir = getBaseContext().getFilesDir().getAbsolutePath();
 		} catch (Exception e) {
+            e("m9.r00t: RunUnroot", "Can't find basedir");
 		}
 		String output = exec(basedir + "/" + "unroot.sh");
 		output(output);
@@ -89,8 +90,9 @@ public class MainActivity extends Activity {
 					process.getInputStream()));
 			int read;
 			char[] buffer = new char[4096];
-			StringBuffer output = new StringBuffer();
-			while ((read = reader.read(buffer)) > 0) {
+			StringBuffer output;
+            output = new StringBuffer();
+            while ((read = reader.read(buffer)) > 0) {
 				output.append(buffer, 0, read);
 			}
 			reader.close();
@@ -105,12 +107,14 @@ public class MainActivity extends Activity {
 
 	public void copyfile(String file) {
 		String basedir = null;
-		String of = file;
-		File f = new File(of);
+		String of;
+        of = file;
+        File f = new File(of);
 
 		try {
 			basedir = getBaseContext().getFilesDir().getAbsolutePath();
 		} catch (Exception e) {
+            e("m9.r00t: copyfile", "Can't find basedir");
 		}
 
 		if (!f.exists()) {
@@ -128,6 +132,7 @@ public class MainActivity extends Activity {
 				in.close();
 				Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + of);
 			} catch (IOException e) {
+                e("m9.r00t: copyfile", "Can't open file" + f);
 			}
 		}
 	}
