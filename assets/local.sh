@@ -20,11 +20,11 @@ echo "mount /system/bin into memory..."
 /data/data/ru.meizu.m9.r00t/files/busybox mount -t tmpfs none /system/bin
 
 echo "link original /system/bin content to new location..."
-/data/data/ru.meizu.m9.r00t/files/busybox ln -s /data/local/system/bin/* /system/bin/
+/data/data/ru.meizu.m9.r00t/files/busybox ln -s /data/data/ru.meizu.m9.r00t/files/system/bin/* /system/bin/
 
 echo "installing busybox and su..."
 /data/data/ru.meizu.m9.r00t/files/busybox --install -s /system/bin
-/data/data/ru.meizu.m9.r00t/files/busybox cp /data/data/ru.meizu.m9.r00t/files/su /system/xbin/su
+/data/data/ru.meizu.m9.r00t/files/busybox cp /data/data/ru.meizu.m9.r00t/files/su /system/bin/su
 
 if [ "$?" == 0 ] ; then
     echo "done. now you have temporary root rights."
