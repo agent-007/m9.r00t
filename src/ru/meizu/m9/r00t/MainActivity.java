@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
 
 	private TextView outputView;
     private Handler handler = new Handler();
+    private final CommonExec commonExec = new CommonExec();
 
 
     /** Called when the activity is first created. */
@@ -54,30 +55,6 @@ public class MainActivity extends Activity {
 			RunUnroot();
 		}
 	};
-
-    String exec(String command) {
-
-        try {
-            Process process = Runtime.getRuntime().exec(command);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
-            int read;
-            char[] buffer;
-            buffer = new char[4096];
-            StringBuffer output;
-            output = new StringBuffer();
-            while ((read = reader.read(buffer)) > 0) {
-                output.append(buffer, 0, read);
-            }
-            reader.close();
-            process.waitFor();
-            return output.toString();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     void copyfile(String file) {
         String basedir = null;
@@ -123,7 +100,7 @@ public class MainActivity extends Activity {
         }
 
 		String output;
-        output = exec(basedir + "/" + "levitator");
+        output = commonExec.exec(basedir + "/" + "levitator");
         output(output);
 	}
 
@@ -137,7 +114,7 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
             e("m9.r00t: RunUnroot", "Can't find basedir");
 		}
-		String output = exec(basedir + "/" + "unroot.sh");
+		String output = commonExec.exec(basedir + "/" + "unroot.sh");
 		output(output);
 	}
 

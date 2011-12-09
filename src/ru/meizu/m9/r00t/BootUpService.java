@@ -1,12 +1,5 @@
 package ru.meizu.m9.r00t;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +8,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import java.io.*;
+
 public class BootUpService extends Service {
+
+    private final CommonExec commonExec = new CommonExec();
 
 	public BootUpService() {
 		// TODO Auto-generated constructor stub
@@ -61,7 +58,7 @@ public class BootUpService extends Service {
 		} catch (Exception e) {
 		}
 
-		String output = exec(basedir + "/" + "levitator");
+		String output = commonExec.exec(basedir + "/" + "levitator");
 
 	}
 
@@ -78,26 +75,7 @@ public class BootUpService extends Service {
 	}
 
 	// Executes UNIX command.
-	private String exec(String command) {
-		try {
-			Process process = Runtime.getRuntime().exec(command);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					process.getInputStream()));
-			int read;
-			char[] buffer = new char[4096];
-			StringBuffer output = new StringBuffer();
-			while ((read = reader.read(buffer)) > 0) {
-				output.append(buffer, 0, read);
-			}
-			reader.close();
-			process.waitFor();
-			return output.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
+
 
 	private void copyfile(String file) {
 		String basedir = null;
