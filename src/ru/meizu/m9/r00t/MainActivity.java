@@ -8,16 +8,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.*;
-
 import static android.util.Log.e;
 
 public class MainActivity extends Activity {
 
 	private TextView outputView;
     private Handler handler = new Handler();
+    private final CommonTasks commonTasks = new CommonTasks();
 
-	/** Called when the activity is first created. */
+    /** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,11 +32,11 @@ public class MainActivity extends Activity {
         localDisableButton = (Button) findViewById(R.id.localDisableButton);
         localDisableButton.setOnClickListener(onLocalDisableButtonClick);
 
-		copyfile("su");
-		copyfile("busybox");
-		copyfile("levitator");
-		copyfile("local.sh");
-		copyfile("unroot.sh");
+        commonTasks.copyfile("su");
+        commonTasks.copyfile("busybox");
+        commonTasks.copyfile("levitator");
+        commonTasks.copyfile("local.sh");
+        commonTasks.copyfile("unroot.sh");
 
 	}
 
@@ -64,7 +63,7 @@ public class MainActivity extends Activity {
         }
 
 		String output;
-        output = exec(basedir + "/" + "levitator");
+        output = commonTasks.exec(basedir + "/" + "levitator");
         output(output);
 	}
 
@@ -78,63 +77,8 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
             e("m9.r00t: RunUnroot", "Can't find basedir");
 		}
-		String output = exec(basedir + "/" + "unroot.sh");
+		String output = commonTasks.exec(basedir + "/" + "unroot.sh");
 		output(output);
-	}
-
-	// Executes UNIX command.
-	private String exec(String command) {
-		try {
-			Process process = Runtime.getRuntime().exec(command);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					process.getInputStream()));
-			int read;
-			char[] buffer = new char[4096];
-			StringBuffer output;
-            output = new StringBuffer();
-            while ((read = reader.read(buffer)) > 0) {
-				output.append(buffer, 0, read);
-			}
-			reader.close();
-			process.waitFor();
-			return output.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void copyfile(String file) {
-		String basedir = null;
-		String of;
-        of = file;
-        File f = new File(of);
-
-		try {
-			basedir = getBaseContext().getFilesDir().getAbsolutePath();
-		} catch (Exception e) {
-            e("m9.r00t: copyfile", "Can't find basedir");
-		}
-
-		if (!f.exists()) {
-			try {
-				InputStream in = getAssets().open(file);
-				FileOutputStream out = getBaseContext().openFileOutput(of,
-						MODE_PRIVATE);
-
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				out.close();
-				in.close();
-				Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + of);
-			} catch (IOException e) {
-                e("m9.r00t: copyfile", "Can't open file" + f);
-			}
-		}
 	}
 
 	private void output(final String str) {
