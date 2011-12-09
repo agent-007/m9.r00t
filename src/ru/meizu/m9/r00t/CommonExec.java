@@ -1,11 +1,70 @@
 package ru.meizu.m9.r00t;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.util.Log;
+
+import java.io.*;
+
+import static android.util.Log.e;
 
 public class CommonExec {
+
+    private Context baseContext;
+    private AssetManager assets;
+
     public CommonExec() {
+        //PrepareFiles();
+    }
+
+    private String getBasedir() {
+        String basedir = null;
+        try {
+            basedir = getBaseContext().getFilesDir().getAbsolutePath();
+        } catch (Exception e) {
+            e("m9.r00t: RunExploit", "Can't find basedir");
+        }
+        return basedir;
+    }
+
+    private void copyfile(String file) {
+        String basedir = null;
+        String of;
+        of = file;
+        File f = new File(of);
+
+        try {
+            basedir = getBaseContext().getFilesDir().getAbsolutePath();
+        } catch (Exception e) {
+            Log.e("m9.r00t: copyfile", "Can't find basedir");
+        }
+
+        if (!f.exists()) {
+            try {
+                InputStream in = getAssets().open(file);
+                FileOutputStream out = getBaseContext().openFileOutput(of,
+                        MainActivity.MODE_PRIVATE);
+
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                out.close();
+                in.close();
+                Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + of);
+            } catch (IOException e) {
+                Log.e("m9.r00t: copyfile", "Can't open file" + f);
+            }
+        }
+    }
+
+    public void PrepareFiles() {
+        copyfile("su");
+        copyfile("busybox");
+        copyfile("levitator");
+        copyfile("local.sh");
+        copyfile("unroot.sh");
     }
 
     String exec(String command) {
@@ -30,5 +89,13 @@ public class CommonExec {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Context getBaseContext() {
+        return baseContext;
+    }
+
+    public AssetManager getAssets() {
+        return assets;
     }
 }

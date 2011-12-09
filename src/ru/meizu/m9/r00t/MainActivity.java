@@ -9,7 +9,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static android.util.Log.e;
 
@@ -17,8 +20,8 @@ public class MainActivity extends Activity {
 
 	private TextView outputView;
     private Handler handler = new Handler();
-    private final CommonExec commonExec = new CommonExec();
 
+    private final CommonExec commonExec = new CommonExec();
 
     /** Called when the activity is first created. */
 	@Override
@@ -36,15 +39,18 @@ public class MainActivity extends Activity {
         localDisableButton = (Button) findViewById(R.id.localDisableButton);
         localDisableButton.setOnClickListener(onLocalDisableButtonClick);
 
+        PrepareFiles();
+	}
+
+    private void PrepareFiles() {
         copyfile("su");
         copyfile("busybox");
         copyfile("levitator");
         copyfile("local.sh");
         copyfile("unroot.sh");
+    }
 
-	}
-
-	private OnClickListener onLocalRunButtonClick = new OnClickListener() {
+    private OnClickListener onLocalRunButtonClick = new OnClickListener() {
 		public void onClick(View v) {
 			RunExploit();
 		}
@@ -56,7 +62,7 @@ public class MainActivity extends Activity {
 		}
 	};
 
-    void copyfile(String file) {
+    private void copyfile(String file) {
         String basedir = null;
         String of;
         of = file;
@@ -90,30 +96,25 @@ public class MainActivity extends Activity {
 
 
 	private void RunExploit() {
-
-		String basedir = null;
-
-		try {
-			basedir = getBaseContext().getFilesDir().getAbsolutePath();
-		} catch (Exception e) {
-            e("m9.r00t: RunExploit", "Can't find basedir");
-        }
-
+        String basedir = getBasedir();
 		String output;
         output = commonExec.exec(basedir + "/" + "levitator");
         output(output);
 	}
 
+    private String getBasedir() {
+        String basedir = null;
+        try {
+            basedir = getBaseContext().getFilesDir().getAbsolutePath();
+        } catch (Exception e) {
+            e("m9.r00t: RunExploit", "Can't find basedir");
+        }
+        return basedir;
+    }
 
 
     private void RunUnroot() {
-		String basedir = null;
-
-		try {
-			basedir = getBaseContext().getFilesDir().getAbsolutePath();
-		} catch (Exception e) {
-            e("m9.r00t: RunUnroot", "Can't find basedir");
-		}
+		String basedir = getBasedir();
 		String output = commonExec.exec(basedir + "/" + "unroot.sh");
 		output(output);
 	}

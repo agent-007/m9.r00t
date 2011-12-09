@@ -3,6 +3,7 @@ package ru.meizu.m9.r00t;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,7 +11,12 @@ import android.widget.Toast;
 
 import java.io.*;
 
+import static android.util.Log.e;
+
 public class BootUpService extends Service {
+
+    private AssetManager assets = getAssets();
+    private Context baseContext = getApplicationContext();
 
     private final CommonExec commonExec = new CommonExec();
 
@@ -22,11 +28,7 @@ public class BootUpService extends Service {
 
 		Log.i("m9.r00t", "Received start id " + startId + ": " + intent);
 
-		copyfile("su");
-		copyfile("busybox");
-		copyfile("levitator");
-		copyfile("local.sh");
-
+	    PrepareFiles();
 		RunExploit();
 
 		return startId;
@@ -49,18 +51,29 @@ public class BootUpService extends Service {
 		return null;
 	}
 
+    private String getBasedir() {
+        String basedir = null;
+        try {
+            basedir = getBaseContext().getFilesDir().getAbsolutePath();
+        } catch (Exception e) {
+            e("m9.r00t: RunExploit", "Can't find basedir");
+        }
+        return basedir;
+    }
+
+    private void PrepareFiles() {
+        copyfile("su");
+        copyfile("busybox");
+        copyfile("levitator");
+        copyfile("local.sh");
+        copyfile("unroot.sh");
+    }
+
 	private void RunExploit() {
-
-		String basedir = null;
-
-		try {
-			basedir = getBaseContext().getFilesDir().getAbsolutePath();
-		} catch (Exception e) {
-		}
-
-		String output = commonExec.exec(basedir + "/" + "levitator");
-
-	}
+		String basedir = getBasedir();
+		String output;
+        output = commonExec.exec(basedir + "/" + "levitator");
+    }
 
 	private void NotifyUser() {
 
@@ -78,14 +91,9 @@ public class BootUpService extends Service {
 
 
 	private void copyfile(String file) {
-		String basedir = null;
+		String basedir = getBasedir();
 		String of = file;
 		File f = new File(of);
-
-		try {
-			basedir = getBaseContext().getFilesDir().getAbsolutePath();
-		} catch (Exception e) {
-		}
 
 		if (!f.exists()) {
 			try {
