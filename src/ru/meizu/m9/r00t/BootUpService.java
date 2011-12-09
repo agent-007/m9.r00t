@@ -16,8 +16,11 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import static android.util.Log.e;
 
+=======
+>>>>>>> parent of 12f4884... organize code
 =======
 >>>>>>> parent of 12f4884... organize code
 public class BootUpService extends Service {
