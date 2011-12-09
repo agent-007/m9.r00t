@@ -18,18 +18,20 @@ import static android.util.Log.e;
 
 public class MainActivity extends Activity {
 
-	private TextView outputView;
+    private TextView outputView;
     private Handler handler = new Handler();
 
     private final CommonExec commonExec = new CommonExec();
 
-    /** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+    /**
+     * Called when the activity is first created.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
 
-		outputView = (TextView) findViewById(R.id.outputView);
+        outputView = (TextView) findViewById(R.id.outputView);
 
         Button localRunButton;
         localRunButton = (Button) findViewById(R.id.localRunButton);
@@ -40,7 +42,7 @@ public class MainActivity extends Activity {
         localDisableButton.setOnClickListener(onLocalDisableButtonClick);
 
         PrepareFiles();
-	}
+    }
 
     private void PrepareFiles() {
         copyfile("su");
@@ -51,16 +53,16 @@ public class MainActivity extends Activity {
     }
 
     private OnClickListener onLocalRunButtonClick = new OnClickListener() {
-		public void onClick(View v) {
-			RunExploit();
-		}
-	};
+        public void onClick(View v) {
+            RunExploit();
+        }
+    };
 
-	private OnClickListener onLocalDisableButtonClick = new OnClickListener() {
-		public void onClick(View v) {
-			RunUnroot();
-		}
-	};
+    private OnClickListener onLocalDisableButtonClick = new OnClickListener() {
+        public void onClick(View v) {
+            RunUnroot();
+        }
+    };
 
     private void copyfile(String file) {
         String basedir = null;
@@ -95,12 +97,12 @@ public class MainActivity extends Activity {
     }
 
 
-	private void RunExploit() {
+    private void RunExploit() {
         String basedir = getBasedir();
-		String output;
+        String output;
         output = commonExec.exec(basedir + "/" + "levitator");
         output(output);
-	}
+    }
 
     private String getBasedir() {
         String basedir = null;
@@ -114,18 +116,18 @@ public class MainActivity extends Activity {
 
 
     private void RunUnroot() {
-		String basedir = getBasedir();
-		String output = commonExec.exec(basedir + "/" + "unroot.sh");
-		output(output);
-	}
+        String basedir = getBasedir();
+        String output = commonExec.exec(basedir + "/" + "unroot.sh");
+        output(output);
+    }
 
-	private void output(final String str) {
-		Runnable proc = new Runnable() {
-			public void run() {
-				outputView.setText(str);
-			}
-		};
-		handler.post(proc);
-	}
+    private void output(final String str) {
+        Runnable proc = new Runnable() {
+            public void run() {
+                outputView.setText(str);
+            }
+        };
+        handler.post(proc);
+    }
 
 }

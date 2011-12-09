@@ -19,36 +19,36 @@ public class BootUpService extends Service {
 
     private final CommonExec commonExec = new CommonExec();
 
-	public BootUpService() {
-		// TODO Auto-generated constructor stub
-	}
+    public BootUpService() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
-		Log.i("m9.r00t", "Received start id " + startId + ": " + intent);
+        Log.i("m9.r00t", "Received start id " + startId + ": " + intent);
 
-	    PrepareFiles();
-		RunExploit();
+        PrepareFiles();
+        RunExploit();
 
-		return startId;
+        return startId;
 
-	}
+    }
 
-	@Override
-	public void onCreate() {
+    @Override
+    public void onCreate() {
 
-	}
+    }
 
-	@Override
-	public void onDestroy() {
-		NotifyUser();
-	}
+    @Override
+    public void onDestroy() {
+        NotifyUser();
+    }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     private String getBasedir() {
         String basedir = null;
@@ -68,51 +68,51 @@ public class BootUpService extends Service {
         copyfile("unroot.sh");
     }
 
-	private void RunExploit() {
-		String basedir;
+    private void RunExploit() {
+        String basedir;
         basedir = getBasedir();
         String output;
         output = commonExec.exec(basedir + "/" + "levitator");
     }
 
-	private void NotifyUser() {
+    private void NotifyUser() {
 
-		Context context = getApplicationContext();
-		CharSequence text = "Now you have r00t rights. Service stopped.";
-		int duration = Toast.LENGTH_LONG;
+        Context context = getApplicationContext();
+        CharSequence text = "Now you have r00t rights. Service stopped.";
+        int duration = Toast.LENGTH_LONG;
 
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.show();
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
 
-	}
+    }
 
-	// Executes UNIX command.
+    // Executes UNIX command.
 
 
-	private void copyfile(String file) {
-		String basedir;
+    private void copyfile(String file) {
+        String basedir;
         basedir = getBasedir();
         File f;
         f = new File(file);
 
         if (!f.exists()) {
-			try {
-				InputStream in = getAssets().open(file);
-				FileOutputStream out = getBaseContext().openFileOutput(file,
-						MODE_PRIVATE);
+            try {
+                InputStream in = getAssets().open(file);
+                FileOutputStream out = getBaseContext().openFileOutput(file,
+                        MODE_PRIVATE);
 
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				out.close();
-				in.close();
-				Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + file);
-			} catch (IOException e) {
-			}
-		}
-	}
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                out.close();
+                in.close();
+                Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + file);
+            } catch (IOException e) {
+            }
+        }
+    }
 
 }
