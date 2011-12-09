@@ -1,17 +1,15 @@
 package ru.meizu.m9.r00t;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.*;
 
 import static android.util.Log.e;
 
@@ -19,7 +17,6 @@ public class MainActivity extends Activity {
 
 	private TextView outputView;
     private Handler handler = new Handler();
-    private final CommonTasks commonTasks = new CommonTasks();
 
     /** Called when the activity is first created. */
 	@Override
@@ -37,11 +34,11 @@ public class MainActivity extends Activity {
         localDisableButton = (Button) findViewById(R.id.localDisableButton);
         localDisableButton.setOnClickListener(onLocalDisableButtonClick);
 
-        commonTasks.copyfile("su");
-        commonTasks.copyfile("busybox");
-        commonTasks.copyfile("levitator");
-        commonTasks.copyfile("local.sh");
-        commonTasks.copyfile("unroot.sh");
+        copyfile("su");
+        copyfile("busybox");
+        copyfile("levitator");
+        copyfile("local.sh");
+        copyfile("unroot.sh");
 
 	}
 
@@ -57,6 +54,62 @@ public class MainActivity extends Activity {
 		}
 	};
 
+    public String exec(String command) {
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    process.getInputStream()));
+            int read;
+            char[] buffer;
+            buffer = new char[4096];
+            StringBuffer output;
+            output = new StringBuffer();
+            while ((read = reader.read(buffer)) > 0) {
+                output.append(buffer, 0, read);
+            }
+            reader.close();
+            process.waitFor();
+            return output.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void copyfile(String file) {
+        String basedir = null;
+        String of;
+        of = file;
+        File f = new File(of);
+
+        try {
+            basedir = getBaseContext().getFilesDir().getAbsolutePath();
+        } catch (Exception e) {
+            Log.e("m9.r00t: copyfile", "Can't find basedir");
+        }
+
+        if (!f.exists()) {
+            try {
+                InputStream in = getAssets().open(file);
+                FileOutputStream out = getBaseContext().openFileOutput(of,
+                        MainActivity.MODE_PRIVATE);
+
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                out.close();
+                in.close();
+                Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + of);
+            } catch (IOException e) {
+                Log.e("m9.r00t: copyfile", "Can't open file" + f);
+            }
+        }
+    }
+
+
 	private void RunExploit() {
 
 		String basedir = null;
@@ -68,7 +121,7 @@ public class MainActivity extends Activity {
         }
 
 		String output;
-        output = commonTasks.exec(basedir + "/" + "levitator");
+        output = exec(basedir + "/" + "levitator");
         output(output);
 	}
 
@@ -82,7 +135,7 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
             e("m9.r00t: RunUnroot", "Can't find basedir");
 		}
-		String output = commonTasks.exec(basedir + "/" + "unroot.sh");
+		String output = exec(basedir + "/" + "unroot.sh");
 		output(output);
 	}
 
