@@ -3,20 +3,19 @@ package ru.meizu.m9.r00t;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static android.util.Log.e;
 
 public class BootUpService extends Service {
-
-    private AssetManager assets = getAssets();
-    private Context baseContext = getApplicationContext();
 
     private final CommonExec commonExec = new CommonExec();
 
@@ -70,8 +69,9 @@ public class BootUpService extends Service {
     }
 
 	private void RunExploit() {
-		String basedir = getBasedir();
-		String output;
+		String basedir;
+        basedir = getBasedir();
+        String output;
         output = commonExec.exec(basedir + "/" + "levitator");
     }
 
@@ -91,14 +91,15 @@ public class BootUpService extends Service {
 
 
 	private void copyfile(String file) {
-		String basedir = getBasedir();
-		String of = file;
-		File f = new File(of);
+		String basedir;
+        basedir = getBasedir();
+        File f;
+        f = new File(file);
 
-		if (!f.exists()) {
+        if (!f.exists()) {
 			try {
 				InputStream in = getAssets().open(file);
-				FileOutputStream out = getBaseContext().openFileOutput(of,
+				FileOutputStream out = getBaseContext().openFileOutput(file,
 						MODE_PRIVATE);
 
 				byte[] buf = new byte[1024];
@@ -108,7 +109,7 @@ public class BootUpService extends Service {
 				}
 				out.close();
 				in.close();
-				Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + of);
+				Runtime.getRuntime().exec("chmod 755 " + basedir + "/" + file);
 			} catch (IOException e) {
 			}
 		}

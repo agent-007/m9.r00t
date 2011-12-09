@@ -1,17 +1,13 @@
 package ru.meizu.m9.r00t;
 
-import android.content.Context;
-import android.content.res.AssetManager;
+import android.app.Application;
 import android.util.Log;
 
 import java.io.*;
 
 import static android.util.Log.e;
 
-public class CommonExec {
-
-    private Context baseContext;
-    private AssetManager assets;
+public class CommonExec extends Application {
 
     public CommonExec() {
         //PrepareFiles();
@@ -91,11 +87,4 @@ public class CommonExec {
         }
     }
 
-    public Context getBaseContext() {
-        return baseContext;
-    }
-
-    public AssetManager getAssets() {
-        return assets;
-    }
 }
