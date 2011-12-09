@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
 	private TextView outputView;
     private Handler handler = new Handler();
 
+
     /** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,8 @@ public class MainActivity extends Activity {
 		}
 	};
 
-    public String exec(String command) {
+    String exec(String command) {
+
         try {
             Process process = Runtime.getRuntime().exec(command);
             BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -77,7 +79,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void copyfile(String file) {
+    void copyfile(String file) {
         String basedir = null;
         String of;
         of = file;
