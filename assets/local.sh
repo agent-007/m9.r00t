@@ -56,7 +56,9 @@ if [ $(find /data/local/fonts -iname '*.ttf' 2>/dev/null | wc -l) -gt 0 ] ; then
     "$BASEDIR"/busybox mount -o bind /system/fonts "$BASEDIR"/system/fonts
     "$BASEDIR"/busybox mount -t tmpfs none /system/fonts
     "$BASEDIR"/busybox ln -s "$BASEDIR"/system/fonts/* /system/fonts/
-    "$BASEDIR"/busybox ln -s /data/local/fonts/* /system/fonts/
+    for FONT in $(find /data/local/fonts -iname '*.ttf') ; do
+        "$BASEDIR"/busybox ln -s /data/local/fonts/"$FONT" /system/fonts/
+    done
 else
     echo "use default system fonts..."
 fi
