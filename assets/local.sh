@@ -52,11 +52,11 @@ fi
 echo "check fonts replacement directory..."
 if [ $(find /data/local/fonts -iname '*.ttf' 2>/dev/null | wc -l) -gt 0 ] ; then
     echo "safely replace system fonts..."
-    /system/bin/mkdir -p "$BASEDIR"/system/fonts
-    /system/bin/mount -o bind /system/fonts "$BASEDIR"/system/fonts
-    /system/bin/mount -t tmpfs none /system/fonts
-    /system/bin/ln -s "$BASEDIR"/system/fonts/* /system/fonts/
-    /system/bin/ln -s /data/local/fonts/* /system/fonts/
+    "$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/fonts
+    "$BASEDIR"/busybox mount -o bind /system/fonts "$BASEDIR"/system/fonts
+    "$BASEDIR"/busybox mount -t tmpfs none /system/fonts
+    "$BASEDIR"/busybox ln -s "$BASEDIR"/system/fonts/* /system/fonts/
+    "$BASEDIR"/busybox ln -s /data/local/fonts/* /system/fonts/
 else
     echo "use default system fonts..."
 fi
