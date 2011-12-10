@@ -59,6 +59,7 @@ if [ $(find /data/local/fonts -iname '*.ttf' 2>/dev/null | wc -l) -gt 0 ] ; then
     for FONT in $(find /data/local/fonts -iname '*.ttf') ; do
         "$BASEDIR"/busybox cp -sf "$FONT" /system/fonts/
     done
+    "$BASEDIR"/busybox pkill -HUP com.android.launcher
 else
     echo "use default system fonts..."
 fi
