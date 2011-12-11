@@ -15,14 +15,14 @@ chmod 4755 "$BASEDIR"/busybox
 chmod 4755 "$BASEDIR"/su
 
 echo "store original /system  to new path..."
+"$BASEDIR"/busybox rm -r "$BASEDIR"/system
 "$BASEDIR"/busybox mkdir -p "$BASEDIR"/system
 "$BASEDIR"/busybox mount -o bind /system "$BASEDIR"/system
 
 echo "mount /system into memory..."
 "$BASEDIR"/busybox mount -t tmpfs none /system
-
-echo "link original /system  content to new location..."
-"$BASEDIR"/busybox cp -sf "$BASEDIR"/system/* /system/
+#echo "link original /system  content to new location..."
+"$BASEDIR"/busybox ln -s "$BASEDIR/system/*" /system/
 
 echo "installing busybox and su..."
 "$BASEDIR"/busybox mkdir -p /system/xbin
