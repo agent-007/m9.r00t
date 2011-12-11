@@ -9,6 +9,7 @@ if [ "$?" == 0 ] ; then
 fi
 
 echo "running from uid 0..."
+"$BASEDIR"/busybox rm -r "$BASEDIR"/system
 
 echo "prepare busybox and su..."
 chmod 4755 "$BASEDIR"/busybox
