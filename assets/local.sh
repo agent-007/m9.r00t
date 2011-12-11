@@ -33,7 +33,7 @@ echo "installing busybox and su..."
     
 echo "store original /system/etc to new path..."
 "$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/etc
-"$BASEDIR"/busybox mount -o bind /system/bin "$BASEDIR"/system/etc
+"$BASEDIR"/busybox mount -o bind /system/etc "$BASEDIR"/system/etc
 
 echo "mount /system/etc into memory..."
 "$BASEDIR"/busybox mount -t tmpfs none /system/etc
