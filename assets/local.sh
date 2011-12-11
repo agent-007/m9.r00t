@@ -35,7 +35,7 @@ test -f /data/data/hosts
 if [ "$?" == 0 ] ; then
     echo "store original /system/etc to new path..."
     "$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/etc
-    "$BASEDIR"/busybox mount -o bind /system/bin "$BASEDIR"/system/etc
+    "$BASEDIR"/busybox mount -o bind /system/etc "$BASEDIR"/system/etc
 
     echo "mount /system/etc into memory..."
     "$BASEDIR"/busybox mount -t tmpfs none /system/etc
@@ -43,7 +43,7 @@ if [ "$?" == 0 ] ; then
     echo "link original /system/etc content to new location..."
     "$BASEDIR"/busybox ln -s "$BASEDIR"/system/etc/* /system/etc/
 
-    "$BASEDIR"/busybox ln -s /data/data/hosts /system/etc/
+    "$BASEDIR"/busybox cp -sf /data/data/hosts /system/etc/
     echo "change system /etc/hosts to adfree version..."
 else
     echo "adfree is not installed or not configured properly."
