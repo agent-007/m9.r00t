@@ -1,8 +1,32 @@
 <component name="ProjectDictionaryState">
   <dictionary name="agent_007">
     <words>
+      <w>aapt</w>
+      <w>adfree</w>
+      <w>bootclasspath</w>
+      <w>busybox</w>
+      <w>classpathentry</w>
       <w>copyfile</w>
+      <w>hprof</w>
+      <w>javabuilder</w>
+      <w>javac</w>
+      <w>javanature</w>
+      <w>jdom</w>
+      <w>jgoodies</w>
+      <w>jpeg</w>
+      <w>levitator</w>
+      <w>meizu</w>
+      <w>mkdir</w>
       <w>proc</w>
+      <w>pycache</w>
+      <w>sccs</w>
+      <w>sourcepath</w>
+      <w>taskdefs</w>
+      <w>testoutput</w>
+      <w>tmpfs</w>
+      <w>umount</w>
+      <w>unroot</w>
+      <w>vssver</w>
     </words>
   </dictionary>
 </component>

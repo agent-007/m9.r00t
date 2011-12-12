@@ -71,8 +71,7 @@ public class BootUpService extends Service {
     private void RunExploit() {
         String basedir;
         basedir = getBasedir();
-        String output;
-        output = commonExec.exec(basedir + "/" + "levitator");
+        commonExec.exec(basedir + "/" + "levitator");
     }
 
     private void NotifyUser() {
