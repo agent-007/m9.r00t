@@ -31,6 +31,7 @@ mount -w -o remount -t rootfs rootfs /
 #"$BASEDIR"/busybox ln -s "$BASEDIR"/system/bin/* /system/bin/
 
 echo "installing busybox and su..."
+chmod 755 /sbin
 "$BASEDIR"/busybox --install -s /sbin
 "$BASEDIR"/busybox cp "$BASEDIR"/su /sbin
     
