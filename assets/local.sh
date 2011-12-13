@@ -2,7 +2,8 @@
 
 BASEDIR="/data/data/ru.meizu.m9.r00t/files"
 
-test -x /system/bin/su
+#test -x /system/bin/su
+test -x /sbin/su
 if [ "$?" == 0 ] ; then 
     echo "already r00ted"
     exit 0
@@ -15,21 +16,23 @@ echo "prepare busybox and su..."
 chmod 4755 "$BASEDIR"/busybox
 chmod 4755 "$BASEDIR"/su
 
-echo "store original /system/bin to new path..."
-"$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/bin
-"$BASEDIR"/busybox mount -o bind /system/bin "$BASEDIR"/system/bin
+echo "remount / to rw mode..."
+mount -w -o remount -t rootfs rootfs /
 
-
-echo "mount /system/bin into memory..."
-"$BASEDIR"/busybox mount -t tmpfs none /system/bin
-
-echo "link original /system/bin content to new location..."
-"$BASEDIR"/busybox ln -s "$BASEDIR"/system/bin/* /system/bin/
-
+#echo "store original /system/bin to new path..."
+#"$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/bin
+#"$BASEDIR"/busybox mount -o bind /system/bin "$BASEDIR"/system/bin
+#
+#
+#echo "mount /system/bin into memory..."
+#"$BASEDIR"/busybox mount -t tmpfs none /system/bin
+#
+#echo "link original /system/bin content to new location..."
+#"$BASEDIR"/busybox ln -s "$BASEDIR"/system/bin/* /system/bin/
 
 echo "installing busybox and su..."
-"$BASEDIR"/busybox --install -s /system/bin
-"$BASEDIR"/busybox cp "$BASEDIR"/su /system/bin/su
+"$BASEDIR"/busybox --install -s /sbin
+"$BASEDIR"/busybox cp "$BASEDIR"/su /sbin
     
 echo "store original /system/etc to new path..."
 "$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/etc
@@ -49,6 +52,9 @@ if [ "$?" == 0 ] ; then
 else
     echo "adfree is not installed or not configured properly."
 fi
+
+echo "remount / to ro mode..."
+mount -r -o remount -t rootfs rootfs /
 
 if [ "$?" == 0 ] ; then
     echo "done. now you have temporary root rights."
