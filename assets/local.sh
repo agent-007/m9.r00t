@@ -48,8 +48,8 @@ echo "link original /system/etc content to new location..."
 echo "check adfree files in /data..." 
 test -f /data/data/hosts
 if [ "$?" == 0 ] ; then
-    "$BASEDIR"/busybox ln -s /data/data/hosts /system/etc/
     echo "change system /etc/hosts to adfree version..."
+    "$BASEDIR"/busybox cp -sf /data/data/hosts /system/etc/
 else
     echo "adfree is not installed or not configured properly."
 fi
