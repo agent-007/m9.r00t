@@ -30,6 +30,8 @@ public class BootUpService extends Service {
         PrepareFiles();
         RunExploit();
 
+        Log.i("m9.r00t", "pwned");
+
         return startId;
 
     }
