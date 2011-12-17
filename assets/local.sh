@@ -32,8 +32,9 @@ mount -w -o remount -t rootfs rootfs /
 
 echo "installing busybox and su..."
 chmod 755 /sbin
-"$BASEDIR"/busybox --install -s /sbin
-"$BASEDIR"/busybox cp "$BASEDIR"/su /sbin
+"$BASEDIR"/busybox ln -s "$BASEDIR"/busybox /sbin
+/sbin/busybox --install -s /sbin
+"$BASEDIR"/busybox cp -f "$BASEDIR"/su /sbin
     
 echo "store original /system/etc to new path..."
 "$BASEDIR"/busybox mkdir -p "$BASEDIR"/system/etc
