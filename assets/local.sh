@@ -55,6 +55,34 @@ else
     echo "adfree is not installed or not configured properly."
 fi
 
+echo "looking for alternate fonts..."
+
+test -f /sdcard/fonts/DroidSansFallback.ttf
+if [ "$?" == 0 ] ; then
+    "$BASEDIR"/busybox rm -rf /data/local/fonts
+    "$BASEDIR"/busybox mkdir -p /data/local/fonts
+    "$BASEDIR"/busybox cp /sdcard/fonts/* /data/local/fonts
+else
+    "$BASEDIR"/busybox rm -rf /data/local/fonts
+fi
+
+test -f /data/local/fonts/DroidSansFallback.ttf
+if [ "$?" == 0 ] ; then
+    echo "mount /system/fonts into memory..."
+    "$BASEDIR"/busybox mount -t tmpfs none /system/fonts
+    "$BASEDIR"/busybox cp -sf /data/local/fonts/* /system/fonts/
+    
+    setprop persist.service.adb.enable 1
+    killall com.android.launcher
+    am start -n com.android.launcher/com.android.launcher2.Launcher
+    killall com.android.systemui
+    am startservice -n com.android.systemui/.statusbar.StatusBarService
+    killall com.android.mms
+    killall com.android.phone
+else
+    echo "system fonts is good for you."
+fi
+
 echo "remount / to ro mode..."
 mount -r -o remount -t rootfs rootfs /
 
